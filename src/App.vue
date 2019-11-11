@@ -5,8 +5,18 @@
       <router-link to="/about">About</router-link>
     </div>
     <router-view/>
+    <YesNoComponent />
   </div>
 </template>
+
+<script>
+  import YesNoComponent from './components/YesNoComponent.vue'
+    export default {
+      components: {
+        YesNoComponent
+      }
+    }
+</script>
 
 <style>
 #app {

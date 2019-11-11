@@ -1,7 +1,9 @@
 import { shallowMount, mount } from '@vue/test-utils'
 import Form from '@/components/Form.vue'
+import YesNoComponent from '@/components/YesNoComponent.vue'
 import Vue from "vue";
-// import flushPromises from 'flush-promises'
+import flushPromises from 'flush-promises';
+import sinon from 'sinon';
 
 // const flushPromises = require('flush-promises');
 
@@ -82,8 +84,12 @@ describe('Form Component', () => {
         expect(spanElem.exists()).toBe(false);
   
         button.trigger('click');
+
+        // await flushPromises()
   
         expect(showValue).toHaveBeenCalledTimes(1);
+
+        expect(spanElem.exists()).toBe(false);
   
         await wrapper.vm.$nextTick(() => {
           wrapper.setData({isFirstNameDisplayed: true});
@@ -105,7 +111,32 @@ describe('Form Component', () => {
       expect(errorMessage.exists()).toBe(false);
     }),
   
-    it('should display error message when submitting the form with empty input field', async() => {
+    // fit('should display error message when submitting the form with empty input field', async() => {
+    //   //GIVEN
+    //   let errorMessage = wrapper.find('.errorMessage');
+    //   expect(errorMessage.exists()).toBe(false);
+  
+    //   //WHEN
+    //   wrapper.find('.butt').trigger('click');
+
+    //   await flushPromises();
+
+    //   expect(errorMessage.exists()).toBe(true);
+    //   console.log(wrapper.html());
+
+    //   //THEN
+    //   // await wrapper.vm.$nextTick(() => {
+    //   //   wrapper.setData({error: true});
+    //   //   setTimeout(() => {
+    //   //   expect(wrapper.vm.error).toBe(true);
+    //   // }, 1000);
+    
+    //   // })
+    // }),
+
+
+      
+    fit('should display error message when submitting the form with empty input field', async() => {
       //GIVEN
       let errorMessage = wrapper.find('.errorMessage');
       expect(errorMessage.exists()).toBe(false);
@@ -113,15 +144,46 @@ describe('Form Component', () => {
       //WHEN
       wrapper.find('.butt').trigger('click');
 
+      await Vue.nextTick();
+
+      // console.log(wrapper.html());
+      // expect(wrapper.html()).toEqual(expect.stringContaining("Error! Please enter a value!"));
+
+      let errorMessageAfter = wrapper.find('.errorMessage');
+      expect(errorMessageAfter.exists()).toBe(true);
+      expect(errorMessageAfter.text()).toEqual("Error! Please enter a value!");
+      // console.log("THIS IS THE ERROR STATE", wrapper.vm.error);
+
       //THEN
-      await wrapper.vm.$nextTick(() => {
-        wrapper.setData({error: true});
-        setTimeout(() => {
-        expect(wrapper.vm.error).toBe(true);
-      }, 1000);
+      // await wrapper.vm.$nextTick(() => {
+      //   wrapper.setData({error: true});
+      //   setTimeout(() => {
+      //   expect(wrapper.vm.error).toBe(true);
+      // }, 1000);
     
-      })
+      // })
     }),
+
+    fit('blabla', async () => {
+      const spy = sinon.spy()
+      const wrapper = mount(YesNoComponent, {
+        propsData: {
+          callMe: spy
+        }
+      })
+      // expect(hello.exists()).toBe(false);
+
+      wrapper.find('button.yes').trigger('click')
+      // await Vue.nextTick()
+      await Vue.nextTick();
+
+      let hello = wrapper.find('.hello');
+      expect(spy.calledWith('yes')).toBe(true);
+      // expect(hello.exists()).toBe(true);
+      expect(hello.text()).toBe("Hello123");
+      
+      // spy.should.have.been.calledWith('yes')
+    });
 
     it('should NOT display clear button when error message occurs',  async() => {
       //GIVEN
@@ -171,37 +233,6 @@ describe('Form Component', () => {
       console.log(wrapper.html());
 
     })
-
-    // fit('should display CLEAR BUTTON when submitting the form', async() => {
-    //   //GIVEN
-    //   // wrapper = mount(Form, { sync: false });
-    //   wrapper = shallowMount(Form);
-    //   let clearButton = wrapper.find('.clearButt');
-    //   // expect(clearButton.exists()).toBe(false);
-    //   //WHEN
-    //   wrapper.find('.butt').trigger('click');
-    //   // wrapper.vm.$forceUpdate();
-    //   wrapper.setData({clearButton: true});
-      
-    //   //THEN
-    //   await wrapper.vm.$nextTick(() => {
-    //     console.log("AHHHHHHHHHHHHHHHHHHH11111111111111111111");
-    //     setTimeout(() => {
-    //       console.log("AHHHHHHHHHHHHHHHHHHH2222222222222222222");
-    //       expect(clearButton.exists()).toBe(true);
-    //     }, 1000);
-    //   })
-    //   // wrapper.vm.$nextTick(() => {
-    //   //   // wrapper.setData({clearButton: true});
-        
-    //   //   setTimeout(() => {
-    //   //   expect(wrapper.vm.clearButton).toBe(true);
-    //   //   expect(clearButton.exists()).toBe(true);
-    //   //   expect(false).toBe(true);
-    //   //   }, 10000);
-    //   // })
-  
-    // })
   
     it('should clear FirstName when clicking on clear button', () => {
       let clearButton = wrapper.find('.clearButt');
@@ -241,7 +272,7 @@ describe('Form Component', () => {
       console.log("THAT'S THE SPAN STATE:", wrapper.vm.isFirstNameDisplayed);
     }),
 
-    fit('should NOT display clear button when clicking on itself', () => {
+    it('should NOT display clear button when clicking on itself', () => {
       let clearButton = wrapper.find('.clearButt');
       expect(clearButton.exists()).toBe(false);
       wrapper.setData({clearButton: true});
@@ -254,4 +285,45 @@ describe('Form Component', () => {
       console.log("show me the clear button state",wrapper.vm.clearButton);
     })
   })
+
+  describe('Radio Buttons', () => {
+
+    beforeEach(() => {
+      wrapper = shallowMount(Form);
+    }); 
+
+    it('should confirm that radioYes exists', () => {
+        let radioYes = wrapper.find('.radioYes');
+        expect(radioYes.exists()).toBe(true);
+    }),
+
+    it('should confirm that radioNo exists', () => {
+      let radioYes = wrapper.find('.radioNo');
+      expect(radioYes.exists()).toBe(true);
+    }),
+
+    it('should change value according to selected radio button Yes', () => {
+      wrapper.setData({radios:''});
+
+      wrapper.find('.radioYes').trigger('change');
+
+      expect(wrapper.find('.selected').text()).toBe('Selected: Yes');
+   
+      console.log(wrapper.html());
+
+    })
+
+    it('should change value according to selected radio button No', () => {
+      wrapper.setData({radios:''});
+
+      wrapper.find('.radioNo').trigger('change');
+
+      expect(wrapper.find('.selected').text()).toBe('Selected: No');
+   
+      console.log(wrapper.html());
+
+    })
+
+
+  }) 
 })
