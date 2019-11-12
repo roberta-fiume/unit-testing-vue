@@ -4,8 +4,7 @@ import YesNoComponent from '@/components/YesNoComponent.vue'
 import Vue from "vue";
 import flushPromises from 'flush-promises';
 import sinon from 'sinon';
-import router from "@/router/index.js"
-import Home from "@/views/Home.vue"
+
 
 // const flushPromises = require('flush-promises');
 
@@ -23,6 +22,7 @@ import Home from "@/views/Home.vue"
 
 describe('Form Component', () => {
   let wrapper;
+
 
   describe('Initial state', () => {
     beforeEach(() => {
@@ -310,19 +310,4 @@ describe('Form Component', () => {
 
     })
   }) 
-
-  describe("Routing", () => {
-    fit('should change value according to selected radio button No', async() => {
-      const router = new VueRouter({ routes });
-      const localVue = createLocalVue();
-      localVue.use(VueRouter);
-      const routes = [
-        { path: '/', name: 'home' }
-      ];
-      router.push("/")
-      await wrapper.vm.$nextTick()
-
-      expect(wrapper.find(Home).exists()).toBe(true)
-    })
-  })
 })
