@@ -1,9 +1,11 @@
-import { shallowMount, mount } from '@vue/test-utils'
+import { shallowMount, mount, createLocalVue } from '@vue/test-utils'
 import Form from '@/components/Form.vue'
 import YesNoComponent from '@/components/YesNoComponent.vue'
 import Vue from "vue";
 import flushPromises from 'flush-promises';
 import sinon from 'sinon';
+import router from "@/router/index.js"
+import Home from "@/views/Home.vue"
 
 // const flushPromises = require('flush-promises');
 
@@ -77,64 +79,43 @@ describe('Form Component', () => {
   
   
     it('should store input value in isFirstNameDisplayed on form submit', async() => {
-        const showValue = jest.fn();
-        wrapper.setMethods({showValue});
-        const button = wrapper.find('.butt');
-        let spanElem = wrapper.find('.span');
-        expect(spanElem.exists()).toBe(false);
+      //GIVEN
+      const firstName = wrapper.find('.inputField');
+      firstName.setValue('hello');
+    
+      let spanElement = wrapper.find('.spanElem');
+      expect(spanElement.exists()).toBe(false);
   
-        button.trigger('click');
+      //WHEN
+      wrapper.find('.butt').trigger('click');
 
-        // await flushPromises()
-  
-        expect(showValue).toHaveBeenCalledTimes(1);
+      await Vue.nextTick();
 
-        expect(spanElem.exists()).toBe(false);
-  
-        await wrapper.vm.$nextTick(() => {
-          wrapper.setData({isFirstNameDisplayed: true});
-          setTimeout(() => {
-            expect(wrapper.vm.isFirstNameDisplayed).toBe(true);
-          }, 10000);
-        })
+      //THEN
+      let spanElementAfter = wrapper.find('.spanElem');
+      expect(spanElementAfter.exists()).toBe(true);
+      expect(spanElementAfter.text()).toEqual("hello");
+    }),
+
+    fit('should make sure that ShowValue function has been called', () => {
+      const showValue = jest.fn();
+      wrapper.setMethods({showValue});
+
+      wrapper.find('.butt').trigger('click');
+      expect(showValue).toHaveBeenCalledTimes(1);
     }),
   
     it('should NOT show error message when submitting a valid form', () => {
       //GIVEN
       const firstName = wrapper.find('.inputField');
       firstName.setValue('someValue');
-      let errorMessage = wrapper.find('.errorMessage');
       const button = wrapper.find('.butt');
       //WHEN
       button.trigger('click'); 
       //THEN
+      let errorMessage = wrapper.find('.errorMessage');
       expect(errorMessage.exists()).toBe(false);
     }),
-  
-    // fit('should display error message when submitting the form with empty input field', async() => {
-    //   //GIVEN
-    //   let errorMessage = wrapper.find('.errorMessage');
-    //   expect(errorMessage.exists()).toBe(false);
-  
-    //   //WHEN
-    //   wrapper.find('.butt').trigger('click');
-
-    //   await flushPromises();
-
-    //   expect(errorMessage.exists()).toBe(true);
-    //   console.log(wrapper.html());
-
-    //   //THEN
-    //   // await wrapper.vm.$nextTick(() => {
-    //   //   wrapper.setData({error: true});
-    //   //   setTimeout(() => {
-    //   //   expect(wrapper.vm.error).toBe(true);
-    //   // }, 1000);
-    
-    //   // })
-    // }),
-
-
       
     fit('should display error message when submitting the form with empty input field', async() => {
       //GIVEN
@@ -144,66 +125,44 @@ describe('Form Component', () => {
       //WHEN
       wrapper.find('.butt').trigger('click');
 
-      await Vue.nextTick();
+      // await flushPromises(); I can use this as well
 
-      // console.log(wrapper.html());
-      // expect(wrapper.html()).toEqual(expect.stringContaining("Error! Please enter a value!"));
+      await Vue.nextTick();
 
       let errorMessageAfter = wrapper.find('.errorMessage');
       expect(errorMessageAfter.exists()).toBe(true);
       expect(errorMessageAfter.text()).toEqual("Error! Please enter a value!");
-      // console.log("THIS IS THE ERROR STATE", wrapper.vm.error);
-
-      //THEN
-      // await wrapper.vm.$nextTick(() => {
-      //   wrapper.setData({error: true});
-      //   setTimeout(() => {
-      //   expect(wrapper.vm.error).toBe(true);
-      // }, 1000);
-    
-      // })
     }),
 
-    fit('blabla', async () => {
+
+    it('blabla', async () => {
       const spy = sinon.spy()
       const wrapper = mount(YesNoComponent, {
         propsData: {
           callMe: spy
         }
       })
-      // expect(hello.exists()).toBe(false);
-
       wrapper.find('button.yes').trigger('click')
       // await Vue.nextTick()
       await Vue.nextTick();
 
       let hello = wrapper.find('.hello');
       expect(spy.calledWith('yes')).toBe(true);
-      // expect(hello.exists()).toBe(true);
+      expect(hello.exists()).toBe(true);
       expect(hello.text()).toBe("Hello123");
-      
-      // spy.should.have.been.calledWith('yes')
     });
 
-    it('should NOT display clear button when error message occurs',  async() => {
-      //GIVEN
-      let errorMessage = wrapper.find('.errorMessage');
-      expect(errorMessage.exists()).toBe(false);
-      const clearButton = wrapper.find('.clearButt');
-      expect(clearButton.exists()).toBe(false);
-  
+    it('should NOT display clear button when error message occurs',  async() => {  
       //WHEN
       wrapper.find('.butt').trigger('click');
 
+      await Vue.nextTick();
+
       //THEN
-        await wrapper.vm.$nextTick(() => {
-          wrapper.setData({error: true});
-          setTimeout(() => {
-          expect(wrapper.vm.error).toBe(true);
-          expect(wrapper.vm.clearButton).toBe(false);
-        }, 1000);
-        console.log(wrapper.html());
-      })
+      let errorMessage = wrapper.find('.errorMessage');
+      expect(errorMessage.exists()).toBe(true);
+      const clearButton = wrapper.find('.clearButt');
+      expect(clearButton.exists()).toBe(false);
     }),
 
     it('should NOT display clear button when the input has not been used', () => {
@@ -213,76 +172,103 @@ describe('Form Component', () => {
   
     it('should display CLEAR BUTTON when submitting the form', async() => {
       //GIVEN
-      let clearButton = wrapper.find('.clearButt');
-      expect(clearButton.exists()).toBe(false);
+      const firstName = wrapper.find('.inputField');
+      firstName.setValue('someValue');
+
       //WHEN
       wrapper.find('.butt').trigger('click');
-      // wrapper.vm.$forceUpdate();
+    
+      await Vue.nextTick();
       
       //THEN
-      // expect(clearButton.exists()).toBe(true);
-      await wrapper.vm.$nextTick(() => {
-        wrapper.setData({clearButton: true});
-        setTimeout(() => {
-        expect(wrapper.vm.clearButton).toBe(true);
-        expect(clearButton.exists()).toBe(true);
-        expect(false).toBe(true);
-        }, 1000);
-      })
-      console.log("THIS IS THE BOOLEAN OF THE CLEAR BUTTON:",wrapper.vm.clearButton);
-      console.log(wrapper.html());
+      let clearButton = wrapper.find('.clearButt');
+      expect(clearButton.exists()).toBe(true);
 
     })
   
-    it('should clear FirstName when clicking on clear button', () => {
-      let clearButton = wrapper.find('.clearButt');
-      expect(clearButton.exists()).toBe(false);
-      wrapper.setData({clearButton: true});
-  
+    it('should clear FirstName when clicking on clear button', async() => { //preguntar al respecto: forzar clera button a ser true con setdata o recrear la situacion en que en verdad el boton existe?
+      // let clearButton = wrapper.find('.clearButt');
+      // wrapper.setData({clearButton: true});
       const firstName = wrapper.find('.inputField');
       firstName.setValue('someValue');
-  
-      expect(wrapper.vm.firstName).toBe('someValue');
-  
-      wrapper.find('.clearButt').trigger('click');
-  
-      firstName.setValue('');
-  
+    
+      wrapper.find('.butt').trigger('click');
+     
+      await Vue.nextTick();
+       
+      let clearButton = wrapper.find('.clearButt');
+      expect(clearButton.exists()).toBe(true);
+
+      clearButton.trigger('click');
+
+      await Vue.nextTick();
+
       expect(wrapper.vm.firstName).toBe('');
-      // console.log("THAT'S THE EMPTY INPUT VALUE:", wrapper.vm.firstName)
     }),
   
-    it('should NOT display "isFirstNameDisplayed" when clicking on clear button', () => {
-      let clearButton = wrapper.find('.clearButt');
-      expect(clearButton.exists()).toBe(false);
-      wrapper.setData({clearButton: true});
-      console.log("THAT'S THE CLEAR BUTTON:", wrapper.vm.clearButton)
-      console.log(wrapper.html());
-      expect(wrapper.vm.clearButton).toBe(true);
+    it('should NOT display "isFirstNameDisplayed" when clicking on clear button', async() => { //preguntar lo mismo que arriba
+      // wrapper.setData({clearButton: true});
+      // expect(wrapper.vm.clearButton).toBe(true);
   
+      // let spanElement = wrapper.find('.spanElem');
+      // expect(spanElement.exists()).toBe(false);
+      // wrapper.setData({isFirstNameDisplayed: true});
+      // expect(wrapper.vm.isFirstNameDisplayed).toBe(true);
+
+      // wrapper.find('.clearButt').trigger('click');
+
+      // expect(spanElement.exists()).toBe(false);
+
+
+      const firstName = wrapper.find('.inputField');
+      firstName.setValue('someValue');
+    
+      wrapper.find('.butt').trigger('click');
+     
+      await Vue.nextTick();
+       
+      let clearButton = wrapper.find('.clearButt');
+      expect(clearButton.exists()).toBe(true);
+
+      clearButton.trigger('click');
+
+      await Vue.nextTick();
+      
       let spanElement = wrapper.find('.spanElem');
       expect(spanElement.exists()).toBe(false);
-      wrapper.setData({isFirstNameDisplayed: true});
-      expect(wrapper.vm.isFirstNameDisplayed).toBe(true);
-
-      wrapper.find('.clearButt').trigger('click');
-
-      expect(spanElement.exists()).toBe(false);
-      console.log(wrapper.html());
-      console.log("THAT'S THE SPAN STATE:", wrapper.vm.isFirstNameDisplayed);
+      
     }),
 
-    it('should NOT display clear button when clicking on itself', () => {
+    it('should NOT display clear button when clicking on itself', async() => { //lo mismo que arriba
+      // let clearButton = wrapper.find('.clearButt');
+      // expect(clearButton.exists()).toBe(false);
+      // wrapper.setData({clearButton: true});
+      // expect(wrapper.vm.clearButton).toBe(true);
+  
+      // wrapper.find('.clearButt').trigger('click');
+  
+      // expect(clearButton.exists()).toBe(false);
+      // console.log(wrapper.html());
+      // console.log("show me the clear button state",wrapper.vm.clearButton);
+
+
+      const firstName = wrapper.find('.inputField');
+      firstName.setValue('someValue');
+    
+      wrapper.find('.butt').trigger('click');
+     
+      await Vue.nextTick();
+       
       let clearButton = wrapper.find('.clearButt');
-      expect(clearButton.exists()).toBe(false);
-      wrapper.setData({clearButton: true});
-      expect(wrapper.vm.clearButton).toBe(true);
-  
-      wrapper.find('.clearButt').trigger('click');
-  
-      expect(clearButton.exists()).toBe(false);
+      expect(clearButton.exists()).toBe(true);
+
+      clearButton.trigger('click');
+
+      await Vue.nextTick();
+      
+      let clearButtonAfter = wrapper.find('.clearButt');
+      expect(clearButtonAfter.exists()).toBe(false);
       console.log(wrapper.html());
-      console.log("show me the clear button state",wrapper.vm.clearButton);
     })
   })
 
@@ -323,7 +309,20 @@ describe('Form Component', () => {
       console.log(wrapper.html());
 
     })
-
-
   }) 
+
+  describe("Routing", () => {
+    fit('should change value according to selected radio button No', async() => {
+      const router = new VueRouter({ routes });
+      const localVue = createLocalVue();
+      localVue.use(VueRouter);
+      const routes = [
+        { path: '/', name: 'home' }
+      ];
+      router.push("/")
+      await wrapper.vm.$nextTick()
+
+      expect(wrapper.find(Home).exists()).toBe(true)
+    })
+  })
 })

@@ -9,9 +9,9 @@
     <input type="radio" id="no" value="No" v-model="radios"  class="radioNo">
     <label for="two">No</label>
 
-    <div class="selected">Selected: {{radios}}</div>
+    <div class="selected">You chose: {{radios}}</div>
     <button class="butt" @click="showValue($event)">Submit</button>
-    <span class="spanElem" v-if="isFirstNameDisplayed"> {{firstName}}</span>
+    <span class="spanElem" v-if="isFirstNameDisplayed">{{firstName}}</span>
     <p v-if="error" class="errorMessage">Error! Please enter a value!</p>
     <button v-if="clearButton" class="clearButt" @click="clear"> CLEAR </button>
   </div>
@@ -20,10 +20,10 @@
 <script>
 export default {
  
-  name: 'Form',
-  props: {
-    msg: String
-  },
+  // name: 'Form',
+  // props: {
+  //   msg: String
+  // },
 
   data() {
     return {
@@ -39,11 +39,6 @@ export default {
     console.log("ERROR MESSAGE IN MOUNTED:", this.error);
       console.log("CLEAR BUTTON IN MOUNTED:", this.clearButton);
   },
-
-  // updated() {
-  //    console.log("ERROR MESSAGE IN UPDATED:", this.error);
-  //    console.log("CLEAR BUTTON IN UPDATED", this.clearButton);
-  // },
 
   methods: {
     showValue(event) {
