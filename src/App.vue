@@ -10,11 +10,12 @@
 </template>
 
 <script>
-  // import YesNoComponent from './components/YesNoComponent.vue'
+  import YesNoComponent from './components/YesNoComponent.vue'
     export default {
-      // components: {
-      //   YesNoComponent
-      // }
+      name: 'app',
+      components: {
+        YesNoComponent
+      }
     }
 </script>
 

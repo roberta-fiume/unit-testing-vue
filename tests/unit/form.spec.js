@@ -37,7 +37,7 @@ describe('Form Component', () => {
       let title = wrapper.find('h1');
       expect(title.exists()).toBe(true);
     }),
-  
+
     it('should test that LABEL exists and HAS TEXT IN IT', () => {
       expect(wrapper.contains('label')).toBe(true);
       expect(wrapper.find('.labelField').text()).toBe('Enter value:');
@@ -97,7 +97,7 @@ describe('Form Component', () => {
       expect(spanElementAfter.text()).toEqual("hello");
     }),
 
-    fit('should make sure that ShowValue function has been called', () => {
+    it('should make sure that ShowValue function has been called', () => {
       const showValue = jest.fn();
       wrapper.setMethods({showValue});
 
@@ -117,7 +117,7 @@ describe('Form Component', () => {
       expect(errorMessage.exists()).toBe(false);
     }),
       
-    fit('should display error message when submitting the form with empty input field', async() => {
+    it('should display error message when submitting the form with empty input field', async() => {
       //GIVEN
       let errorMessage = wrapper.find('.errorMessage');
       expect(errorMessage.exists()).toBe(false);
@@ -309,5 +309,27 @@ describe('Form Component', () => {
       console.log(wrapper.html());
 
     })
-  }) 
+  }),
+
+  describe('render prop', () => {
+    let expectedProp = "I am the prop!";
+    wrapper = shallowMount(Form, {
+      propsData: {
+        stringPassedProp: expectedProp 
+      }
+    }),
+
+    fit('renders props when passed', () => {
+      let paragr = wrapper.find('.prop-parag');
+      console.log("this is the paragraph", paragr);
+
+      // expect(wrapper.find('.prop-parag').exists()).toBe(true);
+     
+      expect(wrapper.props().stringPassedProp).toEqual(expectedProp);
+      console.log(wrapper.html());
+
+      // expect(wrapper.props().propPassed).toBe(expectedProp);
+    })
+
+  })
 })

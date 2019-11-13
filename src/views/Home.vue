@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <Form />
+    <Form :stringPassedProp="stringPassed"/>
   </div>
 </template>
 
@@ -12,6 +12,12 @@ export default {
   name: 'home',
   components: {
     Form
+  },
+
+  data(){
+    return {
+     stringPassed: "I am the prop!"
+    }
   }
 }
 </script>

@@ -1,6 +1,7 @@
 <template>
   <div class="hello">
     <h1>Form</h1>
+    <p class="prop-parag"> I am the prop passed: {{stringPassedProp}}</p>
     <label for="one" class="labelField">Enter value:</label>
     <input type="text" v-model="firstName" class="inputField">
     <input type="radio" id="yes" value="Yes" v-model="radios" class="radioYes">
@@ -20,10 +21,7 @@
 <script>
 export default {
  
-  // name: 'Form',
-  // props: {
-  //   msg: String
-  // },
+  props: ['stringPassedProp'],
 
   data() {
     return {
