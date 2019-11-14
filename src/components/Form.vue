@@ -19,6 +19,7 @@
 </template>
 
 <script>
+
 export default {
  
   props: ['stringPassedProp'],
@@ -44,6 +45,8 @@ export default {
       // console.log("clearrr1", this.clearButton);
       this.isFirstNameDisplayed = true;
       this.clearButton = true;
+     
+      this.$emit('childToParent', this.firstName)
       // console.log("clearrr2", this.clearButton);
       this.showErrorMessage();
     },
