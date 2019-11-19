@@ -1,13 +1,14 @@
 <template>
   <div class="home">
-    <Form :stringPassedProp="stringPassed"  v-on:childToParent="onChildClick"/>
+    <p>I'm the parent Home</p>
+    <Form :stringPassedProp="stringPassed" @first-name="firstName"/>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import Form from '@/components/Form.vue'
-import { EventBus } from '@/eventBus.js';
+// import { EventBus } from '@/eventBus.js';
 
 export default {
   name: 'home',
@@ -15,24 +16,27 @@ export default {
     Form
   },
 
+  props: ['undefinedName'],
+
   data(){
     return {
      stringPassed: "I am the prop!",
-     valueFromForm: ""
+    //  valueFromForm: ""
+
     }
   },
 
   methods: {
-    onChildClick(value) {
-     this.valueFromForm = value;
-     
-      console.log("THIS IS VALUE OF THE FORM IN THE PARENT", this.valueFromForm)
-    },
-
-  foo() {
-       EventBus.$emit('i-got-clicked', this.valueFromForm);
-       console.log("I am emittedddd")
+    firstName(value) {
+      this.$emit('updateFirstName', value);
     }
+
   }
 }
 </script>
+
+<style>
+  .home{
+    border: 2px solid green;
+  }
+</style>

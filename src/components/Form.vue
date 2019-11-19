@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-    <h1>Form</h1>
+    <h1>I'm the Form child</h1>
     <p class="prop-parag"> I am the prop passed: {{stringPassedProp}}</p>
     <label for="one" class="labelField">Enter value:</label>
     <input type="text" v-model="firstName" class="inputField">
@@ -11,10 +11,11 @@
     <label for="two">No</label>
 
     <div class="selected">You chose: {{radios}}</div>
-    <button class="butt" @click="showValue($event)">Submit</button>
+    <button class="butt" @click="showValue()">Submit</button>
     <span class="spanElem" v-if="isFirstNameDisplayed">{{firstName}}</span>
     <p v-if="error" class="errorMessage">Error! Please enter a value!</p>
     <button v-if="clearButton" class="clearButt" @click="clear"> CLEAR </button>
+    <!-- <button @click="passToHome">Pass to Parent Home </button> -->
   </div>
 </template>
 
@@ -30,24 +31,16 @@ export default {
       error: false,
       isFirstNameDisplayed: false,
       clearButton: false,
-      radios: ""
+      radios: "",
+    
     }
   },
 
-  mounted() {
-    console.log("ERROR MESSAGE IN MOUNTED:", this.error);
-      console.log("CLEAR BUTTON IN MOUNTED:", this.clearButton);
-  },
-
   methods: {
-    showValue(event) {
-      console.log("event1111111111111111111111111", event);
-      // console.log("clearrr1", this.clearButton);
+    showValue() {
       this.isFirstNameDisplayed = true;
       this.clearButton = true;
-     
-      this.$emit('childToParent', this.firstName)
-      // console.log("clearrr2", this.clearButton);
+      this.$emit('first-name', this.firstName)
       this.showErrorMessage();
     },
 
@@ -56,14 +49,11 @@ export default {
         this.isFirstNameDisplayed = false;
          this.clearButton = false;
          this.error = true;
-          this.firstName.onkeyup = setTimeout(() => {
-            this.deleteErrorMessage() 
-        }, 3500);     
-        //  console.log("THE ERROR APPEARS:", this.error)
-          // console.log("VALUE IN SPAN WHEN THERE'S ERROR:", this.isFirstNameDisplayed);
+        //   this.firstName.onkeyup = setTimeout(() => {
+        //     this.deleteErrorMessage() 
+        // }, 3500);     
       } else {
         this.error = false;
-          // console.log("THERE IS NO ERROR:", this.error)
       }
     },
 
@@ -77,12 +67,24 @@ export default {
       this.isFirstNameDisplayed = false;
       this.clearButton = false;
        console.log("VALUE IN SPAN AFTER CLEARING:", this.isFirstNameDisplayed);
-    }
+    },
+
+    // passToHome() {
+    //   console.log("I WORKKK IN HOME")
+    //   this.$emit('fromHomeToApp', this.firstName);
+    //   console.log("I AM THE VALUE FROM FORM TO BE PASSED TO APP",this.firstName)
+    // }
+
+    
   }
 }
 </script>
 
 
 <style>
+
+.hello {
+  border: 2px solid blue;
+}
 
 </style>

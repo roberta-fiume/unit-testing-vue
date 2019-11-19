@@ -319,7 +319,7 @@ describe('Form Component', () => {
       }
     }),
 
-    fit('renders props when passed', () => {
+    it('renders props when passed', () => {
       let paragr = wrapper.find('.prop-parag');
       console.log("this is the paragraph", paragr);
 
@@ -329,7 +329,52 @@ describe('Form Component', () => {
       console.log(wrapper.html());
 
       // expect(wrapper.props().propPassed).toBe(expectedProp);
-    })
+    }),
 
+    describe('emit event', () => {
+      beforeEach(() => {
+        wrapper = shallowMount(Form);
+      }); 
+      
+      fit('should emit event', () => {
+        const firstName = wrapper.find('.inputField');
+        firstName.setValue('someValue');
+       
+        wrapper.vm.$emit('first-name', firstName);
+
+        wrapper.find('.butt').trigger('click');
+        console.log("THIS IS THE EVENT", wrapper.emitted());
+
+        expect(wrapper.emitted()).toBeTruthy();
+        expect(wrapper.emitted('first-name').length).toBe(2);
+        console.log("THIS IS THE LENGTH", wrapper.emitted('first-name').length);
+
+        console.log("the first name EMITTED:",wrapper.emitted('first-name'));
+        console.log("the first name 0:",wrapper.emitted('first-name')[0]);
+        console.log("the first name 1:",wrapper.emitted('first-name')[1]);
+        console.log("the first name 2:",wrapper.emitted('first-name')[2]);
+       
+        console.log("FIRST NAMEEE", firstName);
+        expect(wrapper.emitted('first-name')[0]).toEqual([firstName]);
+
+
+  
+
+        
+      // wrapper.vm.$emit('foo', 123)
+
+     
+      // expect(wrapper.emitted().foo).toBeTruthy()
+
+   
+      // expect(wrapper.emitted().foo.length).toBe(1)
+
+    
+      // console.log("the emitted",wrapper.emitted());
+      // console.log("the foo 1111:",wrapper.emitted().foo[1]);
+      // console.log("the foo 0:",wrapper.emitted().foo[0]);
+      // expect(wrapper.emitted().foo[0]).toEqual([123])
+      })
+    })
   })
 })

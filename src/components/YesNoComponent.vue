@@ -19,7 +19,7 @@
     props: {
       callMe: {
         type: Function
-      }
+      },
     },
 
     methods: {

@@ -1,11 +1,11 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/" >Home</router-link> |
-      <router-link to="/about"><button v-on:click.native="foo">About</button></router-link>
+      <router-link to="/">Home</router-link> |
+      <router-link to="/about" >About</router-link>
     </div>
-    <router-view/>
-    <YesNoComponent />
+    <router-view @updateFirstName="updateFirstName" :status="status"/>
+    <YesNoComponent  />
   </div>
 </template>
 
@@ -15,10 +15,22 @@
       name: 'app',
       components: {
         YesNoComponent
+      },
+
+      data() {
+        return {
+          status: "this is a default message"
+        }
+      },
+
+      methods: {
+        updateFirstName(status) {
+          this.status = status;
+          console.log("I'M THE STATUS", this.status)
+        }
       }
     }
 </script>
-
 <style>
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;

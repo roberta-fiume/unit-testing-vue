@@ -1,13 +1,16 @@
 <template>
   <div class="about">
     <h1>This the about page</h1>
-    <p>This the value passed from sibling: {{fromSibling}} </p>
+    <p>This the value passed from sibling: {{status}} </p>
   </div>
 </template>
 
 <script>
-import { EventBus } from '@/eventBus.js';
+// import { EventBus } from '@/eventBus.js';
 export default {
+  props: {
+    status: String
+  },
   name: 'about',
   data() {
     return {
@@ -19,28 +22,12 @@ export default {
 
  
  mounted() {  
-    console.log("I am mounted shit",this.fromSibling)  
+    console.log("I am mounted shit",this.status)  
   },
-  created() {
-    console.log("I am CREATED shit")
-     EventBus.$on('i-got-clicked', inputValue => {
-      // let example = inputValue;
-      this.fromSibling = inputValue
-      
-      console.log(" I AM FROM SIBLING FROMSIBLING",this.fromSibling);
-    })
-  },
-//  mounted() {
-//      console.log("i am the changed value in MOUNTED:", this.fromSibling)
-//   },
 
-
-
+ 
   methods: {
-    // getValueFromSibling() {
-     
-    //   return this.fromSibling
-    // }
+   
   }
 
   
@@ -48,3 +35,9 @@ export default {
  
 }
 </script>
+
+<style>
+  .about {
+    border: 2px solid lightseagreen;
+  }
+</style>

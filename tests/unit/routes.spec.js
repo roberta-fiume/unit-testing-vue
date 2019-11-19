@@ -30,7 +30,7 @@ describe("Routes", () => {
 
         fit('should render route Home', () => {
             expect(wrapper.find(Home).exists()).toBe(true);
-            console.log("HOMEEEE", Home);
+            // console.log("HOMEEEE", Home);
             console.log(wrapper.html());
             console.log("THIS IS THE PATH HOME", wrapper.vm.$route.path);
            
