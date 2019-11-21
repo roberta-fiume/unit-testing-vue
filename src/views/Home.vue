@@ -16,8 +16,6 @@ export default {
     Form
   },
 
-  props: ['undefinedName'],
-
   data(){
     return {
      stringPassed: "I am the prop!",

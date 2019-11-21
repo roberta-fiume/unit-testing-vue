@@ -1,34 +1,20 @@
 import { shallowMount, mount, createLocalVue } from '@vue/test-utils'
+import Vue from "vue";
 import Form from '@/components/Form.vue'
 import YesNoComponent from '@/components/YesNoComponent.vue'
-import Vue from "vue";
 import flushPromises from 'flush-promises';
 import sinon from 'sinon';
 
-
-// const flushPromises = require('flush-promises');
-
-// describe('HelloWorld.vue', () => {
-//   it('renders props.msg when passed', () => {
-//     const msg = 'new message'
-//     const wrapper = shallowMount(HelloWorld, {
-//       propsData: { msg }
-//     })
-//     expect(wrapper.text()).toMatch(msg)
-//   })
-// })
-
-// jest.setTimeout(70000);
-
 describe('Form Component', () => {
+ 
   let wrapper;
-
-
+  
   describe('Initial state', () => {
+
     beforeEach(() => {
       wrapper = shallowMount(Form);
     })
-  
+
     it('should test that component exists', () => {
       expect(wrapper.exists()).toBe(true);
     }),
@@ -135,22 +121,22 @@ describe('Form Component', () => {
     }),
 
 
-    it('blabla', async () => {
-      const spy = sinon.spy()
-      const wrapper = mount(YesNoComponent, {
-        propsData: {
-          callMe: spy
-        }
-      })
-      wrapper.find('button.yes').trigger('click')
-      // await Vue.nextTick()
-      await Vue.nextTick();
+    // it('blabla', async () => {
+    //   const spy = sinon.spy()
+    //   const wrapper = mount(YesNoComponent, {
+    //     propsData: {
+    //       callMe: spy
+    //     }
+    //   })
+    //   wrapper.find('button.yes').trigger('click')
+    //   // await Vue.nextTick()
+    //   await Vue.nextTick();
 
-      let hello = wrapper.find('.hello');
-      expect(spy.calledWith('yes')).toBe(true);
-      expect(hello.exists()).toBe(true);
-      expect(hello.text()).toBe("Hello123");
-    });
+    //   let hello = wrapper.find('.hello');
+    //   expect(spy.calledWith('yes')).toBe(true);
+    //   expect(hello.exists()).toBe(true);
+    //   expect(hello.text()).toBe("Hello123");
+    // });
 
     it('should NOT display clear button when error message occurs',  async() => {  
       //WHEN
@@ -268,7 +254,6 @@ describe('Form Component', () => {
       
       let clearButtonAfter = wrapper.find('.clearButt');
       expect(clearButtonAfter.exists()).toBe(false);
-      console.log(wrapper.html());
     })
   })
 
@@ -293,10 +278,7 @@ describe('Form Component', () => {
 
       wrapper.find('.radioYes').trigger('change');
 
-      expect(wrapper.find('.selected').text()).toBe('Selected: Yes');
-   
-      console.log(wrapper.html());
-
+      expect(wrapper.find('.selected').text()).toBe('You chose: Yes');
     })
 
     it('should change value according to selected radio button No', () => {
@@ -304,77 +286,39 @@ describe('Form Component', () => {
 
       wrapper.find('.radioNo').trigger('change');
 
-      expect(wrapper.find('.selected').text()).toBe('Selected: No');
-   
-      console.log(wrapper.html());
-
+      expect(wrapper.find('.selected').text()).toBe('You chose: No');
     })
   }),
 
   describe('render prop', () => {
-    let expectedProp = "I am the prop!";
-    wrapper = shallowMount(Form, {
-      propsData: {
-        stringPassedProp: expectedProp 
-      }
-    }),
-
-    it('renders props when passed', () => {
-      let paragr = wrapper.find('.prop-parag');
-      console.log("this is the paragraph", paragr);
-
-      // expect(wrapper.find('.prop-parag').exists()).toBe(true);
-     
-      expect(wrapper.props().stringPassedProp).toEqual(expectedProp);
-      console.log(wrapper.html());
-
-      // expect(wrapper.props().propPassed).toBe(expectedProp);
-    }),
-
-    describe('emit event', () => {
-      beforeEach(() => {
-        wrapper = shallowMount(Form);
-      }); 
-      
-      fit('should emit event', () => {
-        const firstName = wrapper.find('.inputField');
-        firstName.setValue('someValue');
-       
-        wrapper.vm.$emit('first-name', firstName);
-
-        wrapper.find('.butt').trigger('click');
-        console.log("THIS IS THE EVENT", wrapper.emitted());
-
-        expect(wrapper.emitted()).toBeTruthy();
-        expect(wrapper.emitted('first-name').length).toBe(2);
-        console.log("THIS IS THE LENGTH", wrapper.emitted('first-name').length);
-
-        console.log("the first name EMITTED:",wrapper.emitted('first-name'));
-        console.log("the first name 0:",wrapper.emitted('first-name')[0]);
-        console.log("the first name 1:",wrapper.emitted('first-name')[1]);
-        console.log("the first name 2:",wrapper.emitted('first-name')[2]);
-       
-        console.log("FIRST NAMEEE", firstName);
-        expect(wrapper.emitted('first-name')[0]).toEqual([firstName]);
-
-
-  
-
-        
-      // wrapper.vm.$emit('foo', 123)
-
-     
-      // expect(wrapper.emitted().foo).toBeTruthy()
-
    
-      // expect(wrapper.emitted().foo.length).toBe(1)
+    it('renders props when passed', () => {
+      let expectedProp = "I am the prop!";
 
-    
-      // console.log("the emitted",wrapper.emitted());
-      // console.log("the foo 1111:",wrapper.emitted().foo[1]);
-      // console.log("the foo 0:",wrapper.emitted().foo[0]);
-      // expect(wrapper.emitted().foo[0]).toEqual([123])
+      const wrapper = shallowMount(Form, { //si lo pongo en describe el test falla y no me da que encuentra el prop en el paragraph. Porque?
+        propsData: {
+          stringPassedProp: expectedProp 
+        }
       })
+
+      let paragr = wrapper.find('.prop-parag');
+
+      expect(paragr.text()).toContain(expectedProp);
+    })
+  }),
+
+  describe('emit event', () => {
+    beforeEach(() => {
+      wrapper = shallowMount(Form);
+    }); 
+    
+    it('should emit event from child', () => {
+      const firstName = wrapper.find('.inputField');
+      firstName.setValue('someValue');
+
+      wrapper.vm.showValue();
+
+      expect(wrapper.emitted()['first-name'][0]).toEqual(['someValue']);
     })
   })
 })
