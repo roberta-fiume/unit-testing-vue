@@ -1,7 +1,7 @@
 <template>
   <div class="about">
     <h1>This the about page</h1>
-    <p>This the value passed from sibling: {{status}} </p>
+    <p class="text">This the value passed from sibling: {{status}} </p>
   </div>
 </template>
 
@@ -17,22 +17,7 @@ export default {
       fromSibling: "hello",
       example: ""
     }
-  },
-
-
- 
- mounted() {  
-    console.log("I am mounted shit",this.status)  
-  },
-
- 
-  methods: {
-   
   }
-
-  
-    
- 
 }
 </script>
 

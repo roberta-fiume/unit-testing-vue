@@ -4,6 +4,8 @@ import Form from '@/components/Form.vue'
 import YesNoComponent from '@/components/YesNoComponent.vue'
 import flushPromises from 'flush-promises';
 import sinon from 'sinon';
+jest.mock('axios')
+
 
 describe('Form Component', () => {
  
@@ -319,6 +321,42 @@ describe('Form Component', () => {
       wrapper.vm.showValue();
 
       expect(wrapper.emitted()['first-name'][0]).toEqual(['someValue']);
+    })
+  })
+
+  describe('get data from api',() => {
+    beforeEach(() => {
+      wrapper = shallowMount(Form);
+    }); 
+    
+    fit('shoud test Api call', async() => {
+
+      // let name = wrapper.find('.apiResult'); //with async()
+
+      // wrapper.find('.getData').trigger('click');
+
+      // await Vue.nextTick();
+
+      // await Vue.nextTick();
+
+      // expect(name.text()).toBe('Abhi2')
+
+
+
+
+      // let name = wrapper.find('.apiResult'); with done =>
+      // wrapper.find('.getData').trigger('click')
+   
+      // wrapper.vm.$nextTick(() => {
+      //   expect(wrapper.vm.result).toBe('Abhi2')
+      //   done()
+      // })
+
+
+      wrapper.find('.getData').trigger('click');
+      
+      await flushPromises()
+      expect(wrapper.vm.result).toBe('Abhi2')
     })
   })
 })

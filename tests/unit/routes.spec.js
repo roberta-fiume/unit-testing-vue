@@ -37,7 +37,6 @@ describe("Routes", () => {
     }),
 
     describe("Routing ABOUT", () => {
-
         const $route = {
             path: '/about',
             name: 'about'
@@ -60,6 +59,17 @@ describe("Routes", () => {
             expect(wrapper.vm.$route.name).toBe($route.name);
         })
     }),
+
+    describe('render prop', () => {
+   
+        fit('renders props when passed', () => {
+    
+          wrapper = shallowMount(About) 
+          wrapper.setProps({status:'some value'})
+          
+          expect(wrapper.vm.status).toBe('some value');
+        })
+      }),
 
     describe("event in parent", () => {
 
@@ -92,8 +102,6 @@ describe("Routes", () => {
 
             expect(wrapper.emitted('updateFirstName')).toBeTruthy();
         })
-
-
     })
 })
 

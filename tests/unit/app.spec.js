@@ -6,24 +6,23 @@ import sinon from 'sinon';
 
 describe("App component", () => {
     let wrapper;
-    const localVue = createLocalVue();
 
     describe("test events", () => {
-        beforeEach(() => {
+    
+      beforeEach(() => {
             wrapper = shallowMount(App, {
-                stubs: ['router-view']
-            });
+                stubs: ['router-link', 'router-view']
+              
+            })
         }); 
 
-        fit("should receive emit event", () => {
+        it('should render App', () => {
             const emittedFromHome = sinon.stub();
             wrapper.setMethods({ updateFirstName: emittedFromHome });
-            console.log("THIS IS STUBEDD", emittedFromHome)
 
-            // wrapper.find(Home).vm.$emit('updateFirstName');
+            wrapper.find('router-view-stub').vm.$emit('updateFirstName');
 
-            // expect(emittedFromHome.called).toBeTruthy();
+            expect(emittedFromHome.called).toBeTruthy();
         })
     })
-
 })

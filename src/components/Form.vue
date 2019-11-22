@@ -12,10 +12,12 @@
 
     <div class="selected">You chose: {{radios}}</div>
     <button class="butt" @click="showValue()">Submit</button>
+    <button class="getData" @click="fetchResults">Get Data</button>
+    <p class="apiResult">{{result}}</p>
+    <!-- <p>{{errorApi}}</p> -->
     <span class="spanElem" v-if="isFirstNameDisplayed">{{firstName}}</span>
     <p v-if="error" class="errorMessage">Error! Please enter a value!</p>
     <button v-if="clearButton" class="clearButt" @click="clear"> CLEAR </button>
-    <!-- <button @click="passToHome">Pass to Parent Home </button> -->
   </div>
 </template>
 
@@ -32,7 +34,8 @@ export default {
       isFirstNameDisplayed: false,
       clearButton: false,
       radios: "",
-    
+      result: null,
+      // errorApi: null
     }
   },
 
@@ -69,13 +72,34 @@ export default {
        console.log("VALUE IN SPAN AFTER CLEARING:", this.isFirstNameDisplayed);
     },
 
-    // passToHome() {
-    //   console.log("I WORKKK IN HOME")
-    //   this.$emit('fromHomeToApp', this.firstName);
-    //   console.log("I AM THE VALUE FROM FORM TO BE PASSED TO APP",this.firstName)
-    // }
+    async fetchResults() {
+      let url = "http://dummy.restapiexample.com/api/v1/employees";
+      const axios = require('axios');
+      const response = await axios.get(url);
+      console.log("THIS IS RESPONSE:", response)
+      this.result = response.data[0].employee_name
+    }
 
-    
+    // async fetchResults() {
+    //   // const axios = require('axios'); // sin async
+    //   // let url = "http://dummy.restapiexample.com/api/v1/employees";
+    //   // axios.get(url)
+    //   //   .then(response => {
+    //   //     this.result = response.data[0].employee_name
+    //   //   })
+    //   //   .catch(e => {
+    //   //     this.errorApi = e
+    //   //   })
+
+    //   const axios = require('axios');
+    //   let url = "http://dummy.restapiexample.com/api/v1/employees";
+    //   try {
+    //     const response = await axios.get(url);
+    //     this.result = response.data[0].employee_name
+    //   } catch(e) {
+    //     this.errorApi = e
+    //   }
+    // }
   }
 }
 </script>
