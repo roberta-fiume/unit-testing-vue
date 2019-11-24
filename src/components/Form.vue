@@ -22,7 +22,7 @@
 </template>
 
 <script>
-
+import axios from 'axios'
 export default {
  
   props: ['stringPassedProp'],
@@ -72,24 +72,37 @@ export default {
        console.log("VALUE IN SPAN AFTER CLEARING:", this.isFirstNameDisplayed);
     },
 
-    async fetchResults() {
-      let url = "http://dummy.restapiexample.com/api/v1/employees";
-      const axios = require('axios');
-      const response = await axios.get(url);
-      console.log("THIS IS RESPONSE:", response)
-      this.result = response.data[0].employee_name
+    fetchResults() {
+        const getPromise = axios.get("http://dummy.restapiexample.com/api/v1/employees");
+
+        getPromise.then(response => {
+          this.result = response.data[0].employee_name
+        })
+
+        return getPromise
     }
 
-    // async fetchResults() {
-    //   // const axios = require('axios'); // sin async
-    //   // let url = "http://dummy.restapiexample.com/api/v1/employees";
-    //   // axios.get(url)
-    //   //   .then(response => {
-    //   //     this.result = response.data[0].employee_name
-    //   //   })
-    //   //   .catch(e => {
-    //   //     this.errorApi = e
-    //   //   })
+
+      // async fetchResults() {
+      //   let url = "http://dummy.restapiexample.com/api/v1/employees";
+      //   const response = await axios.get(url);
+      //   // console.log("THIS IS RESPONSE:", response)
+      //   this.result = response.data[0].employee_name
+      // }
+
+
+
+    //  fetchResults() {
+    //   const axios = require('axios'); // sin async
+    //   let url = "http://dummy.restapiexample.com/api/v1/employees";
+    //   axios.get(url)
+    //     .then(response => {
+    //       this.result = response.data[0].employee_name
+    //     })
+    //     .catch(e => {
+    //       this.errorApi = e
+    //     })
+    //  }
 
     //   const axios = require('axios');
     //   let url = "http://dummy.restapiexample.com/api/v1/employees";
