@@ -13,6 +13,7 @@
     <div class="selected">You chose: {{radios}}</div>
     <button class="butt" @click="showValue()">Submit</button>
     <button class="getData" @click="fetchResults">Get Data</button>
+     <button class="getData" @click="sendData">Send Data</button>
     <p class="apiResult">{{result}}</p>
     <!-- <p>{{errorApi}}</p> -->
     <span class="spanElem" v-if="isFirstNameDisplayed">{{firstName}}</span>
@@ -80,39 +81,23 @@ export default {
         })
 
         return getPromise
+    },
+
+    sendData() {
+      console.log("I workkkkk", this.firstName)
+      axios.post("http://apicreation-260015.appspot.com/document", {
+        id: this.firstName,
+        myMessage: "message has changed!"
+      })
+      .then((response) => {
+        console.log("this is the responseee", response);
+        let documentId = response.data.documentId;
+        console.log(documentId);
+      },(error) => {
+        console.log(error);
+      });
+  
     }
-
-
-      // async fetchResults() {
-      //   let url = "http://dummy.restapiexample.com/api/v1/employees";
-      //   const response = await axios.get(url);
-      //   // console.log("THIS IS RESPONSE:", response)
-      //   this.result = response.data[0].employee_name
-      // }
-
-
-
-    //  fetchResults() {
-    //   const axios = require('axios'); // sin async
-    //   let url = "http://dummy.restapiexample.com/api/v1/employees";
-    //   axios.get(url)
-    //     .then(response => {
-    //       this.result = response.data[0].employee_name
-    //     })
-    //     .catch(e => {
-    //       this.errorApi = e
-    //     })
-    //  }
-
-    //   const axios = require('axios');
-    //   let url = "http://dummy.restapiexample.com/api/v1/employees";
-    //   try {
-    //     const response = await axios.get(url);
-    //     this.result = response.data[0].employee_name
-    //   } catch(e) {
-    //     this.errorApi = e
-    //   }
-    // }
   }
 }
 </script>
