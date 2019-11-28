@@ -1,5 +1,16 @@
 module.exports = {
-    get: jest.fn(() => Promise.resolve({ data: [  //Jest automatically applies the mock in all our tests
-        { id: "1", employee_name: "Cool"}
-    ]}))
+    get: jest.fn((url) => {
+        return Promise.resolve({ 
+            data: {} 
+        })
+    }),
+
+    post: jest.fn((url, data) => {
+        if (url === 'http://apicreation-260015.appspot.com/document/') {
+            
+            return Promise.resolve({
+                data: { documentId: "KtEQnnAj7Zsiuiiov8bX"}
+            })
+        }
+    })
 }

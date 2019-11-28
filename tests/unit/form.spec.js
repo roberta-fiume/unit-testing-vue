@@ -4,7 +4,7 @@ import Form from '@/components/Form.vue'
 import YesNoComponent from '@/components/YesNoComponent.vue'
 import flushPromises from 'flush-promises';
 import sinon from 'sinon';
-import axios from 'axios'
+import mockAxios from 'axios'
 
 
 
@@ -329,70 +329,56 @@ describe('Form Component', () => {
     })
   })
 
-  describe('get data from api',() => {
+  describe('test api',() => {
     beforeEach(() => {
       wrapper = shallowMount(Form);
       jest.resetModules(); //clean the module registry
       jest.clearAllMocks(); //clean the mocks since they're manipulated by Jest in order to make mocking happen
     }); 
 
-    fit('Calls axios.get', async() => {
-      const valueApi = await wrapper.vm.fetchResults();
+    it('Post to api', async() => {
+      //Given
+      wrapper.setData({ firstName: 'roberta', message: 'sto una merda'});
+      //When
+      const result = await wrapper.vm.sendData();
+      //Then
+      expect(result).toEqual({ data: { documentId: "KtEQnnAj7Zsiuiiov8bX" } });
+      expect(mockAxios.post).toBeCalledWith("http://apicreation-260015.appspot.com/document/", {id: 'roberta', myMessage: 'sto una merda'});
+      expect(wrapper.vm.idDocument).toEqual("KtEQnnAj7Zsiuiiov8bX"); //checking result internal state of component is updated as expected
+    }),
 
-      expect(valueApi).toEqual({ data: [{ id: "1", employee_name: "Cool"}] //checking promise result
-      });
-
-      expect(wrapper.vm.result).toEqual("Cool"); //checking result internal state of component is updated as expected
-      expect(axios.get).toBeCalledWith("http://dummy.restapiexample.com/api/v1/employees");
+    it('Get from api', async() => {
+      //Given
+      let testDocumentId = 'someTestDocumentId'
+      wrapper.setData({ idDocument: testDocumentId});
+      //When
+      const result = await wrapper.vm.fetchResults();
+      //Then
+      expect(result).toEqual({ data: { myId: 'roberta', myMessage: 'sto una merda' } });
+      expect(mockAxios.get).toBeCalledWith("http://apicreation-260015.appspot.com/document/" + testDocumentId);
+      expect(wrapper.vm.myIdResponse).toEqual("roberta");
+      expect(wrapper.vm.messageResponse).toEqual("sto una merda");
     })
 
-
-    // fit('shoud test Api call', async() => {
-
-    //   // let name = wrapper.find('.apiResult'); //with async()
-
-    //   // wrapper.find('.getData').trigger('click');
-
-    //   // await Vue.nextTick();
-
-    //   // await Vue.nextTick();
-
-    //   // expect(name.text()).toBe('Abhi2')
-
-
-
-
-    //   // let name = wrapper.find('.apiResult'); with done =>
-    //   // wrapper.find('.getData').trigger('click')
-   
-    //   // wrapper.vm.$nextTick(() => {
-    //   //   expect(wrapper.vm.result).toBe('Abhi2')
-    //   //   done()
-    //   // })
-
-
-    //   wrapper.find('.getData').trigger('click');
-      
-    //   await flushPromises()
-    //   expect(wrapper.vm.result).toBe('Abhi2')
-    // })
-
-    // fit('shuld display result from api', async() => {
-    //      let name = wrapper.find('.apiResult');
-
-    //       wrapper.find('.getData').trigger('click');
-
-    //       // wrapper.vm.$nextTick(() => {
-    //       //   expect(wrapper.vm.result).toBe('56456464646')
-    //       //   done()
-    //       // })
-    //       await flushPromises();
-    //       expect(name.text()).toBe('56456464646');
-    // });
-
-
-
-
-
+    fit('Generic mock for get TESTTTTTTT, DELETE ME LATER', async() => {
+      //Given
+      let testDocumentId = 'someTestDocumentId'
+      let myTestData = { 
+        data: {myId: "roberta", myMessage: "sto una merda"} 
+      };
+      mockAxios.get.mockImplementationOnce(() =>
+        Promise.resolve(myTestData)
+      );
+      wrapper.setData({ idDocument: testDocumentId});
+      //When
+      const result = await wrapper.vm.fetchResults();
+      //Then
+      expect(result).toEqual({ data: { myId: 'roberta', myMessage: 'sto una merda' } });
+      expect(mockAxios.get).toBeCalledWith("http://apicreation-260015.appspot.com/document/" + testDocumentId);
+      expect(wrapper.vm.myIdResponse).toEqual("roberta");
+      expect(wrapper.vm.messageResponse).toEqual("sto una merda");
+    })
+    
   })
+
 })
