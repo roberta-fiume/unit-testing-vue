@@ -3,7 +3,7 @@
     <h1>I'm the Form child</h1>
     <p class="prop-parag"> I am the prop passed: {{stringPassedProp}}</p>
 
-    <label for="one" class="labelField">Enter Name:</label>
+    <label for="one" class="labelField" >Enter Name:</label>
     <input type="text" v-model="firstName" class="inputField">
 
     <label for="one" class="labelField">Enter Message:</label>
@@ -150,6 +150,14 @@ export default {
 
 .hello {
   border: 2px solid blue;
+}
+
+.inputField {
+  border: 2px solid blue;
+}
+
+.labelField {
+  color: lightseagreen;
 }
 
 </style>
