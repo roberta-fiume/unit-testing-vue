@@ -152,6 +152,10 @@ export default {
   color: lightcoral;
 }
 
+.prop-parag {
+  color: blueviolet;
+}
+
 .hello {
   border: 2px solid blue;
 }
