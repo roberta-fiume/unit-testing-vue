@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-    <h1>I'm the Form child</h1>
+    <h1 class="title">I'm the Form child</h1>
     <p class="prop-parag"> I am the prop passed: {{stringPassedProp}}</p>
 
     <label for="one" class="labelField" >Enter Name:</label>
@@ -148,6 +148,10 @@ export default {
 
 <style>
 
+.title {
+  color: lightcoral;
+}
+
 .hello {
   border: 2px solid blue;
 }
@@ -158,6 +162,12 @@ export default {
 
 .labelField {
   color: lightseagreen;
+}
+
+.getData {
+  width: 100px;
+  height: 30px;
+  border: 2px solid lightseagreen;
 }
 
 </style>
