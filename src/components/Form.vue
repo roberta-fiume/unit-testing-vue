@@ -165,6 +165,8 @@ export default {
 }
 
 .butt {
+  width: 100px;
+  height: 30px;
   border: 2px solid lightsalmon;
 }
 
