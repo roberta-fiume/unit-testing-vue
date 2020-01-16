@@ -172,6 +172,9 @@ export default {
   width: 100px;
   height: 30px;
   border: 2px solid lightsalmon;
+  background: none;
+  border-radius: 5px;
+  margin-right: 10px;
 }
 
 .getData {
