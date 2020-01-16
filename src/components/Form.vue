@@ -164,6 +164,10 @@ export default {
   color: lightseagreen;
 }
 
+.butt {
+  border: 2px solid lightsalmon;
+}
+
 .getData {
   width: 100px;
   height: 30px;
